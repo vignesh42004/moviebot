@@ -7,7 +7,8 @@ import telebot
 import asyncio
 import logging
 import sys
-
+import threading
+from flask import Flask
 
 # Event loop fix
 try:
@@ -65,6 +66,17 @@ async def main():
     finally:
         await app.stop()
 
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run_flask():
+    app.run(host='0.0.0.0', port=10000)
+
+# Start Flask in background thread
+threading.Thread(target=run_flask).start()
 
 if __name__ == "__main__":
     print("""
